@@ -79,7 +79,7 @@ void individual_fitness_set(Individual *ind, double fitness);
  * @param data		Data to copy
  * @param cross		Crosspoint
  */
-void indiviudal_set_chrom_first(Individual *ind, const char *data, int cross);
+void individual_set_chrom_first(Individual *ind, const char *data, int cross);
 
 /**
  * set the last cross bits in the chromosome from data
@@ -88,7 +88,7 @@ void indiviudal_set_chrom_first(Individual *ind, const char *data, int cross);
  * @param data		Data to copy
  * @param cross		Crosspoint
  */
-void indiviudal_set_chrom_last(Individual *ind, const char *data, int cross);
+void individual_set_chrom_last(Individual *ind, const char *data, int cross);
 
 /*
  * Copy the first (or last) part of the chromosome from src to dest

@@ -12,8 +12,6 @@ static char mask[8] = {0x00, 0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC, 0xFE};
 
 void individual_init(int bit_size, int gen)
 {
-	double bytes;
-
 	binary_size = bit_size;
 	byte_size = ceil(bit_size/8.0);
 	total_gen = gen;
@@ -70,7 +68,7 @@ void individual_fitness_set(Individual *ind, double fitness)
 	return;
 }
 
-void indiviudal_set_chrom_first(Individual *ind, const char *data, int cross)
+void individual_set_chrom_first(Individual *ind, const char *data, int cross)
 {
 	int bytes;
 	int bits;
@@ -91,11 +89,10 @@ void indiviudal_set_chrom_first(Individual *ind, const char *data, int cross)
 	return;
 }
 
-void indiviudal_set_chrom_last(Individual *ind, const char *data, int cross)
+void individual_set_chrom_last(Individual *ind, const char *data, int cross)
 {
 	int bytes;
 	int bit;
-	int num;
 	char *ptr;
 
 	bytes = cross / 8;
