@@ -1,18 +1,32 @@
 #ifndef _INDIVIDUAL_H_
 #define _INDIVIDUAL_H_
 
-struct _Indiviudal
+#include "masca.h"
+
+typedef struct _Indiviudal
 {
 	char *chrom;
-	double phenotype;
+	double *phen;
 	double fitness;
-}
+} Individual;
 
-typedef struct _Individual Individual;
+enum
+{
+	INDIVIDUAL_TYPE_TSP,
+	INDIVIDUAL_TYPE_TSP_ORDONEZ
+} IndividualType;
 
 /***************************************************************************
  * @name Individual API
  **************************************************************************/
+
+/**
+ * Init the individual data
+ *
+ * @param bit_size	Size in bits for the chromosome
+ * @param gen		Number of Genes in the chromosome
+ */
+void individual_init(int bit_size, int gen);
 
 /**
  * Create a new individual
@@ -24,28 +38,22 @@ Individual* individual_new();
  *
  * @param ind	The individual to be destroyed
  */
-void individual_destroy(Individual ind);
-
-/**
- * Set the number of bits the individual will use
- *
- * @param size	The number of bits to use
- */
-void individual_set_size_binary(int size);
+void individual_destroy(Individual *ind);
 
 /**
  * Get the size of the individual in bits
  */
-int individual_get_size_binary();
+int individual_binary_size_get();
 
 /**
  * Get the size of the indiviual in bytes
  */
-int individual_get_size_byte();
+int individual_byte_size_get();
 
 /***************************************************************************
  * @name individual Subsystem API
  **************************************************************************/
+#if 0
 
 /**
  * Copy the chromosome from one individual to another one
@@ -54,6 +62,7 @@ int individual_get_size_byte();
  * @param src	The one from we will get the chormosome
  */
 Individual* individual_chrom_cpy(Individual *dest, const Individual *src);
+#endif
 
 /**
  * Set the individual fitness
@@ -61,6 +70,35 @@ Individual* individual_chrom_cpy(Individual *dest, const Individual *src);
  * @param ind		Individual to add the fitness
  * @param fitness	Fitness
  */
-void individual_fitness_add(Individual *ind, double fitness);
+void individual_fitness_set(Individual *ind, double fitness);
+
+/**
+ * Set the first cross bits in the chromosome from data
+ *
+ * @param ind		Individual
+ * @param data		Data to copy
+ * @param cross		Crosspoint
+ */
+void indiviudal_set_chrom_first(Individual *ind, const char *data, int cross);
+
+/**
+ * set the last cross bits in the chromosome from data
+ *
+ * @param ind		Individual
+ * @param data		Data to copy
+ * @param cross		Crosspoint
+ */
+void indiviudal_set_chrom_last(Individual *ind, const char *data, int cross);
+
+/*
+ * Copy the first (or last) part of the chromosome from src to dest
+ *
+ * @param dest		The individual with the new chromosome
+ * @param src		The individual with the actual data
+ * @param cross		Crosspoint, indicate where it finish (start) the chunk
+ * @param first		If true get the first part, else the last one
+ */
+void individual_cpy_chrom_first(Individual *dest, const Individual *src,
+		int cross, bool first);
 
 #endif /* _INDIVIDUAL_H_ */
