@@ -1,4 +1,5 @@
-#include <stlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "individual.h"
@@ -17,7 +18,7 @@ Population* population_new()
 	Individual inds[pop_size];
 	size_t inds_size;
 
-	if (pop_size = 0) {
+	if (pop_size == 0) {
 		printf("Can't have empty population\n");
 		return NULL;
 	}
