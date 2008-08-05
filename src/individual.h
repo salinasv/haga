@@ -30,6 +30,8 @@ void individual_init(int bit_size, int gen);
 
 /**
  * Create a new individual
+ *
+ * @return the new individual
  **/
 Individual* individual_new();
 
@@ -39,6 +41,13 @@ Individual* individual_new();
  * @param ind	The individual to be destroyed
  */
 void individual_destroy(Individual *ind);
+
+/**
+ * Randomize the individual
+ *
+ * @param ind	The individual to randomize
+ **/
+void individual_randomize(Individual *ind);
 
 /**
  * Get the size of the individual in bits

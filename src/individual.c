@@ -51,6 +51,34 @@ void individual_destroy(Individual *ind)
 	return;
 }
 
+void individual_randomize(Individual *ind)
+{
+	int *ptr;
+	char step;
+	int cont;
+	int top;
+
+	step = sizeof(RAND_MAX);
+	cont = 0;
+	top = byte_size / 4;
+	ptr = ind->chrom;
+
+	/* Get some really unkown seed to be used in the random function
+	 * The seed is indeed the unsigned int value of the ind pointer.
+	 * Ugly but I guess it works.
+	 */
+	srand((unsigned int) ind);
+
+	for (top = byte_size /4 ;cont < top; top++) {
+		*ptr = rand();
+		ptr++;
+	}
+
+	if (byte_size % 4 > 0)
+		*ptr = rand();
+	
+}
+
 int individual_binary_size_get()
 {
 	return binary_size;
