@@ -3,8 +3,8 @@
 
 typedef struct _Population
 {
-	Individual *individuals;
-	Individual *matingPool;
+	Individual **individuals;
+	Individual **matingPool;
 } Population;
 
 /***************************************************************************
@@ -24,12 +24,5 @@ void population_init(int size);
  * @return the new population
  */
 Population* population_new();
-
-/**
- * Generate a random population
- *
- * @param population	Population to populate.
- */
-void population_populate(Population *pop);
 
 #endif /* _POPULATION_H_ */
