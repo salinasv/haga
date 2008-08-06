@@ -54,3 +54,14 @@ Population* population_populate(Population *pop)
 
 	return pop;
 }
+
+Population* population_append_ind(Population *pop, Individual *ind)
+{
+	if (pop->actual_size == pop_size - 1)
+		return NULL;
+
+	pop->individuals[pop->actual_size] = ind;
+	pop->actual_size++;
+
+	return pop;
+}

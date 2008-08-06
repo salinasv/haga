@@ -33,4 +33,12 @@ Population* population_new();
  */
 Population* population_populate(Population *pop);
 
+/**
+ * Append an individual to the actual population
+ *
+ * @param pop	The population
+ * @param ind	The individual to be added to the population
+ */
+Population* population_append_ind(Population *pop, Individual *ind);
+
 #endif /* _POPULATION_H_ */
