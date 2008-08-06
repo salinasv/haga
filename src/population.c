@@ -35,6 +35,8 @@ Population* population_new()
 	pop->individuals = memcpy(pop->individuals, inds, inds_size);
 	pop->matingPool = memcpy(pop->matingPool, inds, inds_size);
 
+	pop->actual_size = 0;
+
 	return pop;
 }
 
