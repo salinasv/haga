@@ -25,4 +25,11 @@ void population_init(int size);
  */
 Population* population_new();
 
+/**
+ * Populate the current population with actual real random individuals
+ *
+ * @param pop	the population to be populated
+ */
+Population* population_populate(Population *pop);
+
 #endif /* _POPULATION_H_ */
