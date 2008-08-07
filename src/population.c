@@ -39,7 +39,7 @@ Population* population_populate(Population *pop)
 	int cont;
 
 	/* generate each individual */
-	for (cont = 0; cont < pop_size; cont++) {
+	for (cont = 0; cont < pop->max_size; cont++) {
 		pop->individuals[cont] = individual_new();
 		
 		/* fill and randomize each individual */
@@ -51,7 +51,7 @@ Population* population_populate(Population *pop)
 
 Population* population_append_ind(Population *pop, Individual *ind)
 {
-	if (pop->actual_size == pop_size - 1)
+	if (pop->actual_size == pop->max_size - 1)
 		return NULL;
 
 	pop->individuals[pop->actual_size] = ind;
