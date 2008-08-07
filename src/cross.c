@@ -19,7 +19,7 @@ void cross_point_one(const Individual *parent1, const Individual *parent2,
 	individual_cpy_chrom_first(son2, parent2, crosspoint, FALSE);
 }
 
-cross_point_two(const Individual *parent1, const Individual *parent2,
+void cross_point_two(const Individual *parent1, const Individual *parent2,
 		Individual *son1, Individual *son2,
 		unsigned int crosspoint1, unsigned int crosspoint2, double crossprob)
 {
