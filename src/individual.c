@@ -13,7 +13,7 @@ static char mask[8] = {0x00, 0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC, 0xFE};
 void individual_init(int bit_size, int gen)
 {
 	binary_size = bit_size;
-	byte_size = ceil(bit_size/8.0);
+	byte_size = (int)ceil(bit_size/8.0);
 	total_gen = gen;
 
 	return;
