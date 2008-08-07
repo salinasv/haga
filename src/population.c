@@ -5,14 +5,7 @@
 #include "individual.h"
 #include "population.h"
 
-static int pop_size = 0;
-
-void population_init(int size)
-{
-	pop_size = 0;
-}
-
-Population* population_new()
+Population* population_new(unsigned int pop_size)
 {
 	Population *pop;
 	Individual* inds[pop_size];
@@ -36,6 +29,7 @@ Population* population_new()
 	pop->matingPool = memcpy(pop->matingPool, inds, inds_size);
 
 	pop->actual_size = 0;
+	pop->max_size = pop_size;
 
 	return pop;
 }

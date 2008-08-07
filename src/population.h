@@ -6,6 +6,7 @@ typedef struct _Population
 	Individual **individuals;
 	Individual **matingPool;
 	unsigned int actual_size;
+	unsigned int max_size;
 } Population;
 
 /***************************************************************************
