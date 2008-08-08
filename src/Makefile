@@ -1,4 +1,4 @@
-OBJECTS = population.o cross.o individual.o
+OBJECTS = population.o cross.o individual.o select.o
 
 FLAG = -Wall -lm
 
@@ -13,3 +13,6 @@ population.o: population.c
 
 individual.o: individual.c
 	$(CC) -c $(FLAG) individual.c
+
+select.o: select.c
+	$(CC) -c $(FLAG) select.c

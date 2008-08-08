@@ -1,10 +1,12 @@
 #ifndef _POPULATION_H_
 #define _POPULATION_H_
 
+#include "individual.h"
+
 typedef struct _Population
 {
 	Individual **individuals;
-	Individual **matingPool;
+	Individual **mating_pool;
 	unsigned int actual_size;
 	unsigned int max_size;
 } Population;
