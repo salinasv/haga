@@ -16,13 +16,6 @@ typedef struct _Population
  **************************************************************************/
 
 /**
- * Init the population data
- *
- * @param size	Size of the actual population
- */
-void population_init(int size);
-
-/**
  * Create a new population
  *
  * @return the new population
