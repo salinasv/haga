@@ -99,4 +99,16 @@ void individual_set_chrom_last(Individual *ind, const char *data,
 void individual_cpy_chrom_first(Individual *dest, const Individual *src,
 		int cross, unsigned int gen_num, bool first);
 
+/***************************************************************************
+ * Util
+ **************************************************************************/
+
+/**
+ * Print the current individual in stdout in some way we can see 
+ * what's going on
+ *
+ * @param ind	The individual to be printed
+ */
+void individual_print(Individual *indi, unsigned int gen_num);
+
 #endif /* _INDIVIDUAL_H_ */

@@ -128,3 +128,21 @@ void individual_cpy_chrom_first(Individual *dest, const Individual *src,
 
 	return;
 }
+
+void individual_print(Individual *ind, unsigned int gen_num)
+{
+	int i;
+
+	printf("Char:\n");
+	//ind->chrom[84] = 3;
+	for (i = 0; i < gen_num *sizeof(double); i++)
+		printf("|%.2hhX", ind->chrom[i]);
+
+	printf("\n");
+
+	printf("Phen:\n");
+	for (i = 0; i < gen_num; i++)
+		printf("%d: %f ", i, ind->phen[i]);
+
+	printf("\nFithness: %f\n", ind->fitness);
+}
