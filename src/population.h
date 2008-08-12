@@ -5,10 +5,16 @@
 
 typedef struct _Population
 {
+	/* Data */
 	Individual **individuals;
 	Individual **mating_pool;
+
+	/* population size */
 	unsigned int actual_size;
 	unsigned int max_size;
+
+	/* Individual info */
+	unsigned int ind_gen_num;
 } Population;
 
 /***************************************************************************

@@ -5,30 +5,14 @@
 
 #include "individual.h"
 
-static int binary_size = 0;
-static int byte_size = 0;
-static int total_gen = 0;
 static char mask[8] = {0x00, 0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC, 0xFE};
 
-void individual_init(int bit_size, int gen)
-{
-	binary_size = bit_size;
-	byte_size = (int)ceil(bit_size/8.0);
-	total_gen = gen;
-
-	return;
-}
-
-Individual* individual_new()
+Individual* individual_new(unsigned int gen_num)
 {
 	Individual *ind;
+	unsigned int byte_size = gen_num * sizeof(double);
 	char chrom[byte_size];
-	double phen[total_gen];
-
-	if (binary_size == 0) {
-		printf("Individual_new, we don't have the size\n");
-		return NULL;
-	}
+	double phen[gen_num];
 
 	ind = malloc(sizeof(Individual));
 	ind->chrom = malloc(sizeof(chrom));
@@ -51,12 +35,14 @@ void individual_destroy(Individual *ind)
 	return;
 }
 
-void individual_randomize(Individual *ind)
+void individual_randomize(Individual *ind, unsigned int gen_num)
 {
 	int *ptr;
 	int cont;
 	int top;
+	unsigned int byte_size;
 
+	byte_size = gen_num * sizeof(double);
 	cont = 0;
 	ptr = (int*)ind->chrom;
 
@@ -74,16 +60,6 @@ void individual_randomize(Individual *ind)
 	if (byte_size % 4 > 0)
 		*ptr = rand();
 	
-}
-
-int individual_binary_size_get()
-{
-	return binary_size;
-}
-
-int individual_byte_size_get()
-{
-	return byte_size;
 }
 
 void individual_fitness_set(Individual *ind, double fitness)
@@ -114,12 +90,15 @@ void individual_set_chrom_first(Individual *ind, const char *data, int cross)
 	return;
 }
 
-void individual_set_chrom_last(Individual *ind, const char *data, int cross)
+void individual_set_chrom_last(Individual *ind, const char *data,
+		int cross, unsigned int gen_num)
 {
 	int bytes;
 	int bit;
 	char *ptr;
+	unsigned int byte_size;
 
+	byte_size = gen_num * sizeof(double);
 	bytes = cross / 8;
 	bit = cross % 8;
 
@@ -140,12 +119,12 @@ void individual_set_chrom_last(Individual *ind, const char *data, int cross)
 }
 
 void individual_cpy_chrom_first(Individual *dest, const Individual *src,
-		int cross, bool first)
+		int cross, unsigned int gen_num, bool first)
 {
 	if (first)
 		individual_set_chrom_first(dest, src->chrom, cross);
 	else
-		individual_set_chrom_last(dest, src->chrom, cross);
+		individual_set_chrom_last(dest, src->chrom, cross, gen_num);
 
 	return;
 }

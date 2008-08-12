@@ -21,19 +21,13 @@ enum
  **************************************************************************/
 
 /**
- * Init the individual data
- *
- * @param bit_size	Size in bits for the chromosome
- * @param gen		Number of Genes in the chromosome
- */
-void individual_init(int bit_size, int gen);
-
-/**
  * Create a new individual
+ *
+ * @param gen_num	The number of genotypes
  *
  * @return the new individual
  **/
-Individual* individual_new();
+Individual* individual_new(unsigned int gen_num);
 
 /**
  * Destroy the individual and free memory
@@ -45,19 +39,11 @@ void individual_destroy(Individual *ind);
 /**
  * Randomize the individual
  *
+ * @param gen_num	The number of genotypes
+ *
  * @param ind	The individual to randomize
  **/
-void individual_randomize(Individual *ind);
-
-/**
- * Get the size of the individual in bits
- */
-int individual_binary_size_get();
-
-/**
- * Get the size of the indiviual in bytes
- */
-int individual_byte_size_get();
+void individual_randomize(Individual *ind, unsigned int gen_num);
 
 /***************************************************************************
  * @name individual Subsystem API
@@ -96,8 +82,10 @@ void individual_set_chrom_first(Individual *ind, const char *data, int cross);
  * @param ind		Individual
  * @param data		Data to copy
  * @param cross		Crosspoint
+ * @param gen_num	The number of genotypes
  */
-void individual_set_chrom_last(Individual *ind, const char *data, int cross);
+void individual_set_chrom_last(Individual *ind, const char *data,
+		int cross, unsigned int gen_num);
 
 /*
  * Copy the first (or last) part of the chromosome from src to dest
@@ -105,9 +93,10 @@ void individual_set_chrom_last(Individual *ind, const char *data, int cross);
  * @param dest		The individual with the new chromosome
  * @param src		The individual with the actual data
  * @param cross		Crosspoint, indicate where it finish (start) the chunk
+ * @param gen_num	The number of genotypes
  * @param first		If true get the first part, else the last one
  */
 void individual_cpy_chrom_first(Individual *dest, const Individual *src,
-		int cross, bool first);
+		int cross, unsigned int gen_num, bool first);
 
 #endif /* _INDIVIDUAL_H_ */
