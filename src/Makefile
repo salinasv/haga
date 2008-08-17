@@ -1,18 +1,18 @@
 OBJECTS = population.o cross.o individual.o select.o
 
-FLAG = -Wall -lm
+CFLAGS = -Wall -lm -ggdb
 
 sga: $(OBJECTS)
-	$(CC) -o sga.bin $(FLAG) $(OBJECTS) sga.c
+	$(CC) -o sga.bin $(CFLAGS) $(OBJECTS) sga.c
 
 cross.o: cross.c
-	$(CC) -c $(FLAG) cross.c
+	$(CC) -c $(CFLAGS) cross.c
 
 population.o: population.c
-	$(CC) -c $(FLAG) population.c
+	$(CC) -c $(CFLAGS) population.c
 
 individual.o: individual.c
-	$(CC) -c $(FLAG) individual.c
+	$(CC) -c $(CFLAGS) individual.c
 
 select.o: select.c
-	$(CC) -c $(FLAG) select.c
+	$(CC) -c $(CFLAGS) select.c
