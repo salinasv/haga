@@ -16,7 +16,7 @@
  */
 void cross_point_one(const Individual *parent1, const Individual *parent2,
 		Individual *son1, Individual *son2,
-		unsigned int crosspoint, double crossprob);
+		unsigned int crosspoint, unsigned int gen_num, double crossprob);
 
 /**
  * Perform a Two Point crossover ver the two parents setting them on the two
@@ -32,7 +32,8 @@ void cross_point_one(const Individual *parent1, const Individual *parent2,
  */
 void cross_point_two(const Individual *parent1, const Individual *parent2,
 		Individual *son1, Individual *son2,
-		unsigned int crosspoint1, unsigned int crosspoint2, double crossprob);
+		unsigned int crosspoint1, unsigned int crosspoint2,
+		unsigned int gen_num, double crossprob);
 
 /**
  * Mutate this individual
