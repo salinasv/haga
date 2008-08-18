@@ -2,6 +2,7 @@
 #define _CROSS_H_
 
 #include "individual.h"
+#include "population.h"
 
 /**
  * Perform the one point crossover operator over a entire population
@@ -32,7 +33,7 @@ void cross_point_two(Population *pop, double crossprob);
  */
 void cross_point_one_ind(const Individual *parent1, const Individual *parent2,
 		Individual *son1, Individual *son2,
-		unsigned int crosspoint, unsigned int gen_num, double crossprob);
+		unsigned int crosspoint, unsigned int gen_num);
 
 /**
  * Perform a Two Point crossover ver the two parents setting them on the two
@@ -49,7 +50,7 @@ void cross_point_one_ind(const Individual *parent1, const Individual *parent2,
 void cross_point_two_ind(const Individual *parent1, const Individual *parent2,
 		Individual *son1, Individual *son2,
 		unsigned int crosspoint1, unsigned int crosspoint2,
-		unsigned int gen_num, double crossprob);
+		unsigned int gen_num);
 
 /**
  * Mutate this individual
