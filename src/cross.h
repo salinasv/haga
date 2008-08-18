@@ -29,7 +29,6 @@ void cross_point_two(Population *pop, double crossprob);
  * @param son1			The first son
  * @param son2			The second son
  * @param crosspoint	The point where to perform the cross
- * @param crossprob		The cross probability
  */
 void cross_point_one_ind(const Individual *parent1, const Individual *parent2,
 		Individual *son1, Individual *son2,
@@ -45,7 +44,6 @@ void cross_point_one_ind(const Individual *parent1, const Individual *parent2,
  * @param son2			The second son
  * @param crosspoint1	The first point where to perform the cross
  * @param crosspoint2	The second point where to performe the cross
- * @param crossprob		The cross probability
  */
 void cross_point_two_ind(const Individual *parent1, const Individual *parent2,
 		Individual *son1, Individual *son2,
