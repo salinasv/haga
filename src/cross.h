@@ -56,6 +56,6 @@ void cross_point_two_ind(const Individual *parent1, const Individual *parent2,
  * @param ind		The individual to be mutated
  * @param mutprob	The mutation probability
  */
-void mutation_mutate(Individual *ind, double mutprob);
+void mutation_mutate(Individual *ind, double mutprob, unsigned int gen_num);
 
 #endif /* _CROSS_H_ */
