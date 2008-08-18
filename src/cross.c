@@ -77,3 +77,35 @@ void cross_point_two(Population *pop, double crossprob)
 				point, point2, pop->ind_gen_num);
 	}
 }
+
+static mut_mask = {0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01};
+
+void mutation_mutate(Individual *ind, double mutprob)
+{
+	double normprob;
+	unsigned int point;
+	char *ptr;
+	char offset;
+	char tmp;
+
+	normprob = mutprob * RAND_MAX;
+
+	srand((unsigned int) ind);
+
+	if (rand() >= normprob)
+		return;
+
+	point = rand() % gen_num*8;
+
+	offset = point % 8;
+	point /= gen_num;
+
+	ptr = ind->chrom + offset;
+
+	tmp = *ptr;
+
+	*ptr = tmp & mut_mask[offset] ?
+		tmp & ~mut_mask[offset] :
+		tmp | mut_mask[offset];
+
+}
