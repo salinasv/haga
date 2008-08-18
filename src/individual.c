@@ -97,6 +97,7 @@ void individual_set_chrom_last(Individual *ind, const char *data,
 	int bit;
 	char *ptr;
 	unsigned int byte_size;
+	char prev;
 
 	byte_size = gen_num * sizeof(double);
 	bytes = cross / 8;
@@ -104,11 +105,16 @@ void individual_set_chrom_last(Individual *ind, const char *data,
 
 	ptr = ind->chrom + bytes;
 
+	/* Backup the first bits */
+	prev = *(ind->chrom +bytes) & mask[bit];
+
 	/* copy only one byte */
-	ptr = memcpy(ptr, data, 1);
+	ptr = memcpy(ptr, data + bytes, 1);
 
 	/* Apply the NOT mask to get the last bits */
-	*ptr &= !mask[bit];
+	*ptr &= ~mask[bit];
+	/* Restore the backuped data */
+	*ptr |= prev;
 	/* We want the next byte */
 	ptr++;
 
@@ -134,7 +140,6 @@ void individual_print(Individual *ind, unsigned int gen_num)
 	int i;
 
 	printf("Char:\n");
-	//ind->chrom[84] = 3;
 	for (i = 0; i < gen_num *sizeof(double); i++)
 		printf("|%.2hhX", ind->chrom[i]);
 
