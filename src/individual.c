@@ -5,8 +5,6 @@
 
 #include "individual.h"
 
-#define PHEN_TYPE double
-
 static char mask[8] = {0x00, 0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC, 0xFE};
 
 Individual* individual_new(unsigned int gen_num)
