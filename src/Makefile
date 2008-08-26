@@ -1,4 +1,4 @@
-OBJECTS = population.o cross.o individual.o select.o
+OBJECTS = population.o cross.o individual.o select.o tsp.o
 
 CFLAGS = -Wall -lm -ggdb
 
@@ -16,3 +16,6 @@ individual.o: individual.c
 
 select.o: select.c
 	$(CC) -c $(CFLAGS) select.c
+
+tsp.o: tsp.c
+	$(CC) -c $(CFLAGS) tsp.c
