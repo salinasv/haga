@@ -19,3 +19,6 @@ select.o: select.c
 
 tsp.o: tsp.c
 	$(CC) -c $(CFLAGS) tsp.c
+
+clean:
+	rm *.o
