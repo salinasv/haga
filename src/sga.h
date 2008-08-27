@@ -6,6 +6,4 @@ enum
 	SGA_PROBLEM_TSP
 } SgaProblem;
 
-#define PHEN_TYPE double
-
 #endif /* _SGA_H_ */

@@ -54,12 +54,12 @@ static void create_the_matrix(TSPCostTable *table, int rows, int columns)
 {
 	int i;
 
-	table->cost_table = malloc(rows * sizeof(PHEN_TYPE*));
+	table->cost_table = malloc(rows * sizeof(int*));
 
 	if (!table->cost_table)
 		printf("Everything is bad, you must ask for help\n");
 
-	table->cost_table[0] = malloc(rows * columns * sizeof(PHEN_TYPE));
+	table->cost_table[0] = malloc(rows * columns * sizeof(int));
 
 	if (!table->cost_table)
 		printf("Everything is bad, you must ask for help 2\n");
@@ -81,7 +81,7 @@ void tsp_cost_read(TSPCostTable *table, char *filename)
 	int rows;
 	int columns;
 	int col_bkp;
-	PHEN_TYPE num;
+	int num;
 
 	struct stat statbuf;
 	
@@ -107,7 +107,7 @@ void tsp_cost_read(TSPCostTable *table, char *filename)
 
 	printf("%d rows with %d columns\n", rows, columns);
 
-	/* alloc the cost_table with row * column * sizeof(PHEN_TYPE) bytes */
+	/* alloc the cost_table with row * column * sizeof(int) bytes */
 	create_the_matrix(table, rows, columns);
 	table->col_size = columns;
 	table->row_size = rows;
@@ -126,7 +126,7 @@ void tsp_cost_read(TSPCostTable *table, char *filename)
 
 			num = atoi(wordbuf);
 			table->cost_table[rows][col_bkp] = num;
-			printf("%f%s ", num, (col_bkp == 0) ? "" : ",");
+			printf("%d%s ", num, (col_bkp == 0) ? "" : ",");
 		}
 		printf("\n");
 	}
@@ -143,7 +143,7 @@ void tsp_cost_destroy(TSPCostTable *table)
 	free(table);
 }
 
-long long tsp_evaluate_int(TSPCostTable *table, unsigned int *phen, unsigned int size)
+int tsp_evaluate_int(TSPCostTable *table, unsigned int *phen, unsigned int size)
 {
 	int i;
 	long long acum = 0;

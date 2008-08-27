@@ -5,7 +5,7 @@
 
 typedef struct
 {
-	PHEN_TYPE **cost_table;
+	int **cost_table;
 	unsigned int col_size;
 	unsigned int row_size;
 } TSPCostTable;
@@ -52,6 +52,6 @@ void tsp_table_destroy(TSPCostTable *table);
  *
  * @return The total permutation cost
  */
-long long tsp_evaluate_int(TSPCostTable *table, unsigned int *phen, unsigned int size);
+int tsp_evaluate_int(TSPCostTable *table, unsigned int *phen, unsigned int size);
 
 #endif /* _TSP_H_ */

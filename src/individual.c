@@ -10,9 +10,9 @@ static char mask[8] = {0x00, 0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC, 0xFE};
 Individual* individual_new(unsigned int gen_num)
 {
 	Individual *ind;
-	unsigned int byte_size = gen_num * sizeof(PHEN_TYPE);
+	unsigned int byte_size = gen_num * sizeof(int);
 	char chrom[byte_size];
-	PHEN_TYPE phen[gen_num];
+	int phen[gen_num];
 
 	ind = malloc(sizeof(Individual));
 	ind->chrom = malloc(sizeof(chrom));
@@ -42,7 +42,7 @@ void individual_randomize(Individual *ind, unsigned int gen_num)
 	int top;
 	unsigned int byte_size;
 
-	byte_size = gen_num * sizeof(PHEN_TYPE);
+	byte_size = gen_num * sizeof(int);
 	cont = 0;
 	ptr = (int*)ind->chrom;
 
@@ -99,7 +99,7 @@ void individual_set_chrom_last(Individual *ind, const char *data,
 	unsigned int byte_size;
 	char prev;
 
-	byte_size = gen_num * sizeof(PHEN_TYPE);
+	byte_size = gen_num * sizeof(int);
 	bytes = cross / 8;
 	bit = cross % 8;
 
@@ -140,7 +140,7 @@ void individual_print(Individual *ind, unsigned int gen_num)
 	int i;
 
 	printf("Char:\n");
-	for (i = 0; i < gen_num *sizeof(PHEN_TYPE); i++)
+	for (i = 0; i < gen_num *sizeof(int); i++)
 		printf("|%.2hhX", ind->chrom[i]);
 
 	printf("\n");
