@@ -20,7 +20,7 @@ TSPCostTable* tsp_table_new()
 }
 
 /* Return pointer from strstr() */
-static char* read_line(const char *filebuf, char *linebuf)
+static char* read_line(const char *filebuf, char **linebuf)
 {
 	char *seek;
 	size_t line_size;
@@ -28,15 +28,15 @@ static char* read_line(const char *filebuf, char *linebuf)
 	seek = strstr(filebuf, "\n");
 	line_size = seek - filebuf + 1; /* add a "\t" at the end to help us seeking*/
 
-	linebuf = realloc(linebuf, line_size);
-	linebuf = memcpy(linebuf, filebuf, line_size);
-	linebuf[line_size-1] = '\t';
+	*linebuf = realloc(*linebuf, line_size);
+	*linebuf = memcpy(*linebuf, filebuf, line_size);
+	(*linebuf)[line_size-1] = '\t';
 
 	return seek;
 }
 
 /* Return the pointer from strstr() */
-static char* read_word(const char *linebuf, char *wordbuf)
+static char* read_word(const char *linebuf, char **wordbuf)
 {
 	char *seek;
 	size_t word_size;
@@ -44,8 +44,8 @@ static char* read_word(const char *linebuf, char *wordbuf)
 	seek = strstr(linebuf, "\t");
 	word_size = seek - linebuf;
 
-	wordbuf = realloc(wordbuf, word_size);
-	wordbuf = memcpy(wordbuf, linebuf, word_size);
+	*wordbuf = realloc(*wordbuf, word_size);
+	*wordbuf = memcpy(*wordbuf, linebuf, word_size);
 	
 	return seek;
 }
@@ -94,14 +94,14 @@ void tsp_cost_read(TSPCostTable *table, char *filename)
 	wordbuf = malloc(1);
 
 	/* get size */
-	seekln = read_line(filebuf, linebuf);
+	seekln = read_line(filebuf, &linebuf);
 	seekln++;
-	seek = read_word(linebuf, wordbuf);
+	seek = read_word(linebuf, &wordbuf);
 
 	rows = atoi(wordbuf);
 
 	tmpsrc = seek + 1; /* get rid of the search pattern */
-	seek = read_word(tmpsrc, wordbuf);
+	seek = read_word(tmpsrc, &wordbuf);
 
 	columns = atoi(wordbuf);
 
@@ -115,13 +115,14 @@ void tsp_cost_read(TSPCostTable *table, char *filename)
 	/* start reading */
 	for(rows--; rows >= 0; rows--) {
 		/* get one row */
-		seekln = read_line(seekln, linebuf);
+		seekln = read_line(seekln, &linebuf);
 		seekln++;
 
 		seek = linebuf;
+		//seek = seekln;
 		for(col_bkp = columns -1 ; col_bkp >= 0; col_bkp--) {
 			/* get one word */
-			seek = read_word(seek, wordbuf);
+			seek = read_word(seek, &wordbuf);
 			seek++;
 
 			num = atoi(wordbuf);
