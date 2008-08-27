@@ -6,13 +6,18 @@
 #include <stdio.h>
 #include <string.h>
 
-/* Remove this include, needed because of PHEN_TYPE */
-#include "sga.h"
 #include "tsp.h"
 
-static PHEN_TYPE **cost_table;
-static unsigned int table_size_col = 0;
-static unsigned int table_size_row = 0;
+TSPCostTable* tsp_table_new()
+{
+	TSPCostTable *table;
+
+	table = malloc(sizeof(TSPCostTable));
+	table->col_size = 0;
+	table->row_size = 0;
+
+	return table;
+}
 
 /* Return pointer from strstr() */
 static char* read_line(const char *filebuf, char *linebuf)
@@ -45,25 +50,25 @@ static char* read_word(const char *linebuf, char *wordbuf)
 	return seek;
 }
 
-static void create_the_matrix(int rows, int columns)
+static void create_the_matrix(TSPCostTable *table, int rows, int columns)
 {
 	int i;
 
-	cost_table = malloc(rows * sizeof(PHEN_TYPE*));
+	table->cost_table = malloc(rows * sizeof(PHEN_TYPE*));
 
-	if (!cost_table)
+	if (!table->cost_table)
 		printf("Everything is bad, you must ask for help\n");
 
-	cost_table[0] = malloc(rows * columns * sizeof(PHEN_TYPE));
+	table->cost_table[0] = malloc(rows * columns * sizeof(PHEN_TYPE));
 
-	if (!cost_table)
+	if (!table->cost_table)
 		printf("Everything is bad, you must ask for help 2\n");
 
 	for (i = 0; i < rows; i++)
-		cost_table[i] = cost_table[0] + i * columns;
+		table->cost_table[i] = table->cost_table[0] + i * columns;
 }
 
-void tsp_cost_read(char *filename)
+void tsp_cost_read(TSPCostTable *table, char *filename)
 {
 	char *filebuf;
 	char *linebuf;
@@ -103,9 +108,9 @@ void tsp_cost_read(char *filename)
 	printf("%d rows with %d columns\n", rows, columns);
 
 	/* alloc the cost_table with row * column * sizeof(PHEN_TYPE) bytes */
-	create_the_matrix(rows, columns);
-	table_size_col = columns;
-	table_size_row = rows;
+	create_the_matrix(table, rows, columns);
+	table->col_size = columns;
+	table->row_size = rows;
 
 	/* start reading */
 	for(rows--; rows >= 0; rows--) {
@@ -120,7 +125,7 @@ void tsp_cost_read(char *filename)
 			seek++;
 
 			num = atoi(wordbuf);
-			cost_table[rows][col_bkp] = num;
+			table->cost_table[rows][col_bkp] = num;
 			printf("%f%s ", num, (col_bkp == 0) ? "" : ",");
 		}
 		printf("\n");
@@ -131,22 +136,23 @@ void tsp_cost_read(char *filename)
 
 }
 
-void tsp_cost_destroy()
+void tsp_cost_destroy(TSPCostTable *table)
 {
-	free(cost_table[0]);
-	free(cost_table);
+	free(table->cost_table[0]);
+	free(table->cost_table);
+	free(table);
 }
 
-long long tsp_evaluate_int(unsigned int *phen, unsigned int size)
+long long tsp_evaluate_int(TSPCostTable *table, unsigned int *phen, unsigned int size)
 {
 	int i;
 	long long acum = 0;
 
-	if (cost_table == NULL)
+	if (table->cost_table == NULL)
 		return 0;
 
 	for (i = 0; i < size; i++)
-		acum += cost_table[phen[i]][phen[i+1]];
+		acum += table->cost_table[phen[i]][phen[i+1]];
 
 	return acum;
 }
