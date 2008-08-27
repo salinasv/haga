@@ -19,14 +19,14 @@ Population* population_new(unsigned int pop_size)
 	/* ask space for the population */
 	pop = malloc(sizeof(Population));
 
-	/* ask space for the array of individuals AND matingPool */
+	/* ask space for the array of individuals AND mating_pool */
 	inds_size = sizeof(Individual*) * pop_size;
 	pop->individuals = malloc(inds_size);
-	pop->matingPool = malloc(inds_size);
+	pop->mating_pool = malloc(inds_size);
 
 	/* Copy the local array */
 	pop->individuals = memcpy(pop->individuals, inds, inds_size);
-	pop->matingPool = memcpy(pop->matingPool, inds, inds_size);
+	pop->mating_pool = memcpy(pop->mating_pool, inds, inds_size);
 
 	pop->actual_size = 0;
 	pop->max_size = pop_size;
@@ -40,10 +40,10 @@ Population* population_populate(Population *pop)
 
 	/* generate each individual */
 	for (cont = 0; cont < pop->max_size; cont++) {
-		pop->individuals[cont] = individual_new();
+		pop->individuals[cont] = individual_new(pop->ind_gen_num);
 		
 		/* fill and randomize each individual */
-		individual_randomize(pop->individuals[cont]);
+		individual_randomize(pop->individuals[cont], pop->ind_gen_num);
 	}
 
 	return pop;
