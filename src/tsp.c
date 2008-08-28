@@ -44,6 +44,9 @@ static char* read_word(const char *linebuf, char **wordbuf)
 	seek = strstr(linebuf, "\t");
 	word_size = seek - linebuf;
 
+	if (sizeof(*wordbuf) > word_size)
+		(*wordbuf)[word_size] = '\0';
+
 	*wordbuf = realloc(*wordbuf, word_size);
 	*wordbuf = memcpy(*wordbuf, linebuf, word_size);
 	
