@@ -2,6 +2,7 @@
 #define _TSP_H_
 
 #include "sga.h"
+#include "population.h"
 
 typedef struct
 {
@@ -42,6 +43,14 @@ void tsp_cost_read(TSPCostTable *table, char *filename);
  * @param table 	The table to be destroyed
  **/
 void tsp_table_destroy(TSPCostTable *table);
+
+/**
+ * Read permutation from file and set it to the population
+ *
+ * @param pop		The population to be filled
+ * @param filename	The name of the file where is it the permutation table
+ */
+void tsp_permutation_read_from_file(Population *pop, const char *filename);
 
 /**
  * Evaluate the phen permutation using the [cost] table

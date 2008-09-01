@@ -192,6 +192,85 @@ void tsp_cost_read(TSPCostTable *table, char *filename)
 
 }
 
+void tsp_permutation_read_from_file(Population *pop, const char *filename)
+{
+	Buffer *filebuf;
+	Buffer *linebuf;
+	Buffer *wordbuf;
+	Buffer *seek;
+	Buffer *seekln;
+	Buffer *tmpsrc;
+
+	int fd;
+	int rows;
+	int columns;
+	int col_bkp;
+	int num;
+
+	struct stat statbuf;
+
+	fd = open(filename, O_RDONLY);
+	stat(filename, &statbuf);
+	filebuf = buffer_new();
+	filebuf->buf = mmap(NULL, statbuf.st_size, PROT_READ, MAP_SHARED, fd, 0);
+	filebuf->size = statbuf.st_size;
+
+	linebuf = buffer_new();
+	wordbuf = buffer_new();
+	seek = buffer_new();
+	seekln = buffer_new();
+	tmpsrc = buffer_new();
+	/* get some allocated space */
+	linebuf->buf = malloc(1);
+	linebuf->size = 1;
+	wordbuf->buf = malloc(1);
+	wordbuf->size = 1;
+
+	/* get size */
+	seekln->buf = read_line(filebuf, linebuf);
+	seekln->buf++;
+	seekln->size = linebuf->size;
+	seek->buf = read_word(linebuf, wordbuf);
+	seek->size = wordbuf->size;
+
+	rows = atoi(wordbuf->buf);
+
+	if (rows > pop->actual_size)
+		return;
+
+	tmpsrc->buf = seek->buf + 1; /* get rid of the search pattern */
+	tmpsrc->size = seek->buf - seekln->buf;
+	seek->buf = read_word(tmpsrc, wordbuf);
+
+	columns = atoi(wordbuf->buf);
+
+	if (columns > pop->ind_gen_num)
+		return;
+
+	/* start reading */
+	for(rows--; rows >= 0; rows--) {
+		/* get one row */
+		seekln->buf = read_line(seekln, linebuf);
+		seekln->buf++;
+		seekln->size = linebuf->size;
+
+		seek->buf = linebuf->buf;
+		//seek = seekln;
+		for(col_bkp = columns -1 ; col_bkp >= 0; col_bkp--) {
+			/* get one word */
+			seek->buf = read_word(seek, wordbuf);
+			seek->buf++;
+			seek->size = wordbuf->size;
+
+			num = atoi(wordbuf->buf);
+			pop->individuals[rows]->phen[col_bkp] = num;
+			printf("%d%s ", num, (col_bkp == 0) ? "" : ",\t");
+		}
+		printf("\n");
+	}
+
+}
+
 int tsp_evaluate_int(TSPCostTable *table, unsigned int *phen, unsigned int size)
 {
 	int i;
