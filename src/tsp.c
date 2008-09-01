@@ -8,6 +8,28 @@
 
 #include "tsp.h"
 
+typedef struct _Bufffer
+{
+	char *buf;
+	int size;
+} Buffer;
+
+static Buffer* buffer_new()
+{
+	Buffer *buf;
+	
+	buf = malloc(sizeof(Buffer));
+	buf->size = 0;
+
+	return buf;
+}
+
+static void buffer_destroy(Buffer *buf)
+{
+	free(buf->buf);
+	free(buf);
+}
+
 TSPCostTable* tsp_table_new()
 {
 	TSPCostTable *table;
@@ -20,35 +42,37 @@ TSPCostTable* tsp_table_new()
 }
 
 /* Return pointer from strstr() */
-static char* read_line(const char *filebuf, char **linebuf)
+static char* read_line(const Buffer *filebuf, Buffer *linebuf)
 {
 	char *seek;
 	size_t line_size;
 
-	seek = strstr(filebuf, "\n");
-	line_size = seek - filebuf + 1; /* add a "\t" at the end to help us seeking*/
+	seek = strstr(filebuf->buf, "\n");
+	line_size = seek - filebuf->buf + 1; /* add a "\t" at the end to help us seeking*/
 
-	*linebuf = realloc(*linebuf, line_size);
-	*linebuf = memcpy(*linebuf, filebuf, line_size);
-	(*linebuf)[line_size-1] = '\t';
+	linebuf->buf = realloc(linebuf->buf, line_size);
+	linebuf->size = line_size;
+	linebuf->buf = memcpy(linebuf->buf, filebuf->buf, line_size);
+	linebuf->buf[line_size-1] = '\t';
 
 	return seek;
 }
 
 /* Return the pointer from strstr() */
-static char* read_word(const char *linebuf, char **wordbuf)
+static char* read_word(const Buffer *linebuf, Buffer *wordbuf)
 {
 	char *seek;
 	size_t word_size;
 
-	seek = strstr(linebuf, "\t");
-	word_size = seek - linebuf;
+	seek = strstr(linebuf->buf, "\t");
+	word_size = seek - linebuf->buf;
 
-	if (sizeof(*wordbuf) > word_size)
-		(*wordbuf)[word_size] = '\0';
+	if (wordbuf->size > word_size)
+		wordbuf->buf[word_size] = '\0';
 
-	*wordbuf = realloc(*wordbuf, word_size);
-	*wordbuf = memcpy(*wordbuf, linebuf, word_size);
+	wordbuf->buf = realloc(wordbuf->buf, word_size);
+	wordbuf->size = word_size;
+	wordbuf->buf = memcpy(wordbuf->buf, linebuf->buf, word_size);
 	
 	return seek;
 }
@@ -73,12 +97,12 @@ static void create_the_matrix(TSPCostTable *table, int rows, int columns)
 
 void tsp_cost_read(TSPCostTable *table, char *filename)
 {
-	char *filebuf;
-	char *linebuf;
-	char *wordbuf;
-	char *seek;
-	char *seekln;
-	char *tmpsrc;
+	Buffer *filebuf;
+	Buffer *linebuf;
+	Buffer *wordbuf;
+	Buffer *seek;
+	Buffer *seekln;
+	Buffer *tmpsrc;
 	int fd;
 
 	int rows;
@@ -90,23 +114,35 @@ void tsp_cost_read(TSPCostTable *table, char *filename)
 	
 	fd = open(filename, O_RDONLY);
 	stat(filename, &statbuf);
-	filebuf = mmap(NULL, statbuf.st_size, PROT_READ, MAP_SHARED, fd, 0);
+	filebuf = buffer_new();
+	filebuf->buf = mmap(NULL, statbuf.st_size, PROT_READ, MAP_SHARED, fd, 0);
+	filebuf->size = statbuf.st_size;
 
+	linebuf = buffer_new();
+	wordbuf = buffer_new();
+	seek = buffer_new();
+	seekln = buffer_new();
+	tmpsrc = buffer_new();
 	/* get some allocated space */
-	linebuf = malloc(1);
-	wordbuf = malloc(1);
+	linebuf->buf = malloc(1);
+	linebuf->size = 1;
+	wordbuf->buf = malloc(1);
+	wordbuf->size = 1;
 
 	/* get size */
-	seekln = read_line(filebuf, &linebuf);
-	seekln++;
-	seek = read_word(linebuf, &wordbuf);
+	seekln->buf = read_line(filebuf, linebuf);
+	seekln->buf++;
+	seekln->size = linebuf->size;
+	seek->buf = read_word(linebuf, wordbuf);
+	seek->size = wordbuf->size;
 
-	rows = atoi(wordbuf);
+	rows = atoi(wordbuf->buf);
 
-	tmpsrc = seek + 1; /* get rid of the search pattern */
-	seek = read_word(tmpsrc, &wordbuf);
+	tmpsrc->buf = seek->buf + 1; /* get rid of the search pattern */
+	tmpsrc->size = seek->buf - seekln->buf;
+	seek->buf = read_word(tmpsrc, wordbuf);
 
-	columns = atoi(wordbuf);
+	columns = atoi(wordbuf->buf);
 
 	printf("%d rows with %d columns\n", rows, columns);
 
@@ -118,25 +154,34 @@ void tsp_cost_read(TSPCostTable *table, char *filename)
 	/* start reading */
 	for(rows--; rows >= 0; rows--) {
 		/* get one row */
-		seekln = read_line(seekln, &linebuf);
-		seekln++;
+		seekln->buf = read_line(seekln, linebuf);
+		seekln->buf++;
+		seekln->size = linebuf->size;
 
-		seek = linebuf;
+		seek->buf = linebuf->buf;
 		//seek = seekln;
 		for(col_bkp = columns -1 ; col_bkp >= 0; col_bkp--) {
 			/* get one word */
-			seek = read_word(seek, &wordbuf);
-			seek++;
+			seek->buf = read_word(seek, wordbuf);
+			seek->buf++;
+			seek->size = wordbuf->size;
 
-			num = atoi(wordbuf);
+			num = atoi(wordbuf->buf);
 			table->cost_table[rows][col_bkp] = num;
-			printf("%d%s ", num, (col_bkp == 0) ? "" : ",");
+			printf("%d%s ", num, (col_bkp == 0) ? "" : ",\t");
 		}
 		printf("\n");
 	}
 
-	free(linebuf);
-	free(wordbuf);
+	buffer_destroy(linebuf);
+	buffer_destroy(wordbuf);
+	/* we must not destroy this ones because they buffers are only copy from the
+	 * one in wordbuf and linebuf */
+	free(seek);
+	free(seekln);
+	free(tmpsrc);
+	/* We must not destroy filebuf because it's pointing to kenel oned memory */
+	free(filebuf);
 
 }
 
