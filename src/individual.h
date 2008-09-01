@@ -6,8 +6,8 @@
 typedef struct _Indiviudal
 {
 	char *chrom;
-	double *phen;
-	double fitness;
+	int *phen;
+	int fitness;
 } Individual;
 
 enum
@@ -65,7 +65,7 @@ Individual* individual_chrom_cpy(Individual *dest, const Individual *src);
  * @param ind		Individual to add the fitness
  * @param fitness	Fitness
  */
-void individual_fitness_set(Individual *ind, double fitness);
+void individual_fitness_set(Individual *ind, int fitness);
 
 /**
  * Set the first cross bits in the chromosome from data

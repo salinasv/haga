@@ -62,7 +62,7 @@ void individual_randomize(Individual *ind, unsigned int gen_num)
 	
 }
 
-void individual_fitness_set(Individual *ind, double fitness)
+void individual_fitness_set(Individual *ind, int fitness)
 {
 	ind->fitness = fitness;
 
