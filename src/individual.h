@@ -6,7 +6,7 @@
 typedef struct _Indiviudal
 {
 	char *chrom;
-	int *phen;
+	unsigned int *phen;
 	int fitness;
 } Individual;
 

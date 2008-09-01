@@ -205,7 +205,7 @@ void tsp_permutation_read_from_file(Population *pop, const char *filename)
 	int rows;
 	int columns;
 	int col_bkp;
-	int num;
+	unsigned int num;
 
 	struct stat statbuf;
 
