@@ -235,8 +235,10 @@ void tsp_permutation_read_from_file(Population *pop, const char *filename)
 
 	rows = atoi(wordbuf->buf);
 
-	if (rows > pop->actual_size)
+	if (rows > pop->max_size)
 		return;
+
+	pop->actual_size = rows;
 
 	tmpsrc->buf = seek->buf + 1; /* get rid of the search pattern */
 	tmpsrc->size = seek->buf - seekln->buf;
@@ -244,6 +246,7 @@ void tsp_permutation_read_from_file(Population *pop, const char *filename)
 
 	columns = atoi(wordbuf->buf);
 
+	printf("The gen num is %d\n", pop->ind_gen_num);
 	if (columns > pop->ind_gen_num)
 		return;
 
@@ -280,7 +283,7 @@ int tsp_evaluate_int(TSPCostTable *table, unsigned int *phen, unsigned int size)
 		return 0;
 
 	for (i = 0; i < size; i++)
-		acum += table->cost_table[phen[i]][phen[i+1]];
+		acum += table->cost_table[phen[i]-1][phen[i+1]-1];
 
 	return acum;
 }
