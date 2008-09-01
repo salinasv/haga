@@ -147,7 +147,7 @@ void individual_print(Individual *ind, unsigned int gen_num)
 
 	printf("Phen:\n");
 	for (i = 0; i < gen_num; i++)
-		printf("%d: %f ", i, ind->phen[i]);
+		printf("%d: %d ", i, ind->phen[i]);
 
-	printf("\nFithness: %f\n", ind->fitness);
+	printf("\nFithness: %d\n", ind->fitness);
 }
