@@ -1,6 +1,6 @@
 OBJECTS = population.o cross.o individual.o select.o tsp.o
 
-CFLAGS = -Wall -lm -ggdb
+CFLAGS = -Wall -lm -ggdb -pg
 
 sga: $(OBJECTS)
 	$(CC) -o sga.bin $(CFLAGS) $(OBJECTS) sga.c
