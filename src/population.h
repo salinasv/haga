@@ -26,7 +26,7 @@ typedef struct _Population
  *
  * @return the new population
  */
-Population* population_new();
+Population* population_new(unsigned int pop_size, unsigned int ind_size);
 
 /**
  * Populate the current population with actual real random individuals

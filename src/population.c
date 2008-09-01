@@ -5,7 +5,7 @@
 #include "individual.h"
 #include "population.h"
 
-Population* population_new(unsigned int pop_size)
+Population* population_new(unsigned int pop_size, unsigned int ind_size)
 {
 	Population *pop;
 	Individual* inds[pop_size];
@@ -30,6 +30,7 @@ Population* population_new(unsigned int pop_size)
 
 	pop->actual_size = 0;
 	pop->max_size = pop_size;
+	pop->ind_gen_num = ind_size;
 
 	return pop;
 }
