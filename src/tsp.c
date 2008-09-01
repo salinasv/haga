@@ -41,6 +41,13 @@ TSPCostTable* tsp_table_new()
 	return table;
 }
 
+void tsp_cost_destroy(TSPCostTable *table)
+{
+	free(table->cost_table[0]);
+	free(table->cost_table);
+	free(table);
+}
+
 /* Return pointer from strstr() */
 static char* read_line(const Buffer *filebuf, Buffer *linebuf)
 {
@@ -183,13 +190,6 @@ void tsp_cost_read(TSPCostTable *table, char *filename)
 	/* We must not destroy filebuf because it's pointing to kenel oned memory */
 	free(filebuf);
 
-}
-
-void tsp_cost_destroy(TSPCostTable *table)
-{
-	free(table->cost_table[0]);
-	free(table->cost_table);
-	free(table);
 }
 
 int tsp_evaluate_int(TSPCostTable *table, unsigned int *phen, unsigned int size)
