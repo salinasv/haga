@@ -35,7 +35,6 @@ entity order_perm is
 	Port (
 	clk		: in std_logic;
 	Dat_in	: in std_logic_vector(M_LOG2-1 downto 0);
-	start	: in std_logic;
 	reset	: in std_logic;
 
 	-- Agregar este registro para meterle un delay y el dato esté a la par
@@ -118,7 +117,7 @@ begin
 	end process;
 
 	-- Do not set the output data when we have nota valid data, at the first
-	-- read. Also, reset when we get 'start'
+	-- read.
 	DAT:process (clk)
 	begin
 		if (clk = '1' and clk'event) then

@@ -46,7 +46,6 @@ ARCHITECTURE behavior OF tb_order_perm_vhd IS
 	PORT(
 		clk : IN std_logic;
 		Dat_in : IN std_logic_vector(7 downto 0);
-		start : IN std_logic;          
 		reset : IN std_logic;
 		datram : OUT std_logic_vector(7 downto 0);
 		addr : OUT std_logic_vector(7 downto 0);
@@ -57,7 +56,6 @@ ARCHITECTURE behavior OF tb_order_perm_vhd IS
 
 	--Inputs
 	SIGNAL clk :  std_logic := '0';
-	SIGNAL start :  std_logic := '1';
 	SIGNAL reset :  std_logic := '1';
 	SIGNAL Dat_in :  std_logic_vector(7 downto 0) := (others=>'0');
 
@@ -102,7 +100,6 @@ BEGIN
 	PORT MAP(
 		clk => clk,
 		Dat_in => Dat_in,
-		start => start,
 		reset => reset,
 		datram => datram,
 		addr => addr,
@@ -130,17 +127,6 @@ BEGIN
 			end if;
 		end if;
 	end process;
-
-	st : process (clk)
-	begin
-		if (clk = '1' and clk'event) then
-			if (iter = LAST-2) then
-				start <= '1';
-			else
-				start <= '0';
-			end if;
-		end if;
-	end process;	
 
 	RST:process (clk)
 	begin
