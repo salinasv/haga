@@ -112,7 +112,7 @@ BEGIN
 
 	tb : PROCESS
 	BEGIN
-		wait for clk_T;
+		wait for clk_T/2;
 		clk <= not clk;
 	END PROCESS;
 
@@ -120,7 +120,7 @@ BEGIN
 	begin
 		if (clk = '1' and clk'event) then
 			if (done = '0') then
-				if (iter = LAST or done = '1' or reset = '1') then
+				if (iter = LAST or reset = '1') then
 					iter <= 0;
 				else
 					iter <= iter + 1;
@@ -145,9 +145,6 @@ BEGIN
 	RST:process (clk)
 	begin
 		if (clk = '1' and clk'event) then
-			--if (iter = LAST) then
-			--	reset <= '0';
-			--els
 			if (done = '1') then
 				reset <= '1';
 			else
@@ -165,7 +162,6 @@ BEGIN
 		if (clk = '1' and clk'event) then
 			if (WE = '1') then
 				ram_out(conv_integer(addr)) <= conv_integer(Datram);
-				--ram_out(conv_integer(addr)) <= Datram;
 			end if;
 		end if;
 	end process;
