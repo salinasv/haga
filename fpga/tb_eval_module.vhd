@@ -86,14 +86,14 @@ BEGIN
 		P_UNITS		=> 8	-- Number of processing units
 	)
 	PORT MAP(
-		clk => clk,
-		reset => reset,
-		dest_load => dest_load,
-		Iter => Iter,
-		Current => Current,
-		dest_in => dest_in,
-		Dest_out => Dest_out,
-		Sum_out => Sum_out
+		clk 		=> clk,
+		reset 		=> reset,
+		dest_load 	=> dest_load,
+		Iter 		=> Iter,
+		Current 	=> Current,
+		dest_in 	=> dest_in,
+		Dest_out 	=> Dest_out,
+		Sum_out 	=> Sum_out
 	);
 
 	-- clock generator.
