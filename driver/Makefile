@@ -2,7 +2,7 @@
 # If KERNELRELEASE is defined, we've been invoked from the kernel
 # build system and can use its languaje.
 ifneq ($(KERNELRELEASE),)
-	obj-m := hello.o
+	obj-m := haga_drvr.o
 
 # Otherwise we are called directly from the command line
 # invoque the kernel build system

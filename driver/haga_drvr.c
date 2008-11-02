@@ -6,10 +6,11 @@
 #include <linux/init.h>
 #include <linux/module.h>
  
-MODULE_ICENSE("GPL");
+MODULE_LICENSE("GPL");
 
 static int __init haga_init(void)
 {
+	return 0;
 }
 
 static void __exit haga_exit(void)
