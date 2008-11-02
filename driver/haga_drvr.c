@@ -8,11 +8,11 @@
  
 MODULE_ICENSE("GPL");
 
-static int haga_init(void)
+static int __init haga_init(void)
 {
 }
 
-static void haga_exit(void)
+static void __exit haga_exit(void)
 {
 }
 
