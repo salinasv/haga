@@ -5,26 +5,61 @@
 
 #include <linux/init.h>
 #include <linux/module.h>
+#include <linux/pci.h>
 
 #define LCL_DEBUG_ALL 0
 
 #define LCL_DEBUG_LEVEL LCL_DEBUG_ALL
+
+#define CUSTOM_VENDOR 0x10EE
+#define TSP_COPROCESSOR  0x0007
  
 MODULE_LICENSE("GPL");
+
+static struct pci_device_id ids[] = {
+	{ PCI_DEVICE(CUSTOM_VENDOR, TSP_COPROCESSOR), },
+	{ 0, }
+};
+MODULE_DEVICE_TABLE(pci, ids);
+
+static int probe(struct pci_dev *dev, const struct pci_device_id *id)
+{
+	pci_enable_device(dev);
+
+#if LCL_DEBUG_LEVEL >= LCL_DEBUG_ALL
+	printk(KERN_ALERT "We have got a device\n");
+#endif
+
+	return 0;
+}
+
+static void remove(struct pci_dev *dev)
+{
+}
+
+static struct pci_driver pci_driver = {
+	.name = "haga",
+	.id_table = ids,
+	.probe = probe,
+	.remove = remove,
+};
 
 static int __init haga_init(void)
 {
 #if LCL_DEBUG_LEVEL >= LCL_DEBUG_ALL
-	printk(KERN_ALERT "Loading haga-drvr\n");
+	printk(KERN_ALERT "Loading haga-drvr.\n");
 #endif /* LCL_DEBUG_LEVEL */
-	return 0;
+
+	return pci_register_driver(&pci_driver);
 }
 
 static void __exit haga_exit(void)
 {
 #if LCL_DEBUG_LEVEL >= LCL_DEBUG_ALL
-	printk(KERN_ALERT "Unloading haga-drvr\n");
+	printk(KERN_ALERT "Unloading haga-drvr.\n");
 #endif /* LCL_DEBUG_LEVEL */
+
+	pci_unregister_driver(&pci_driver);
 }
 
 module_init(haga_init);
