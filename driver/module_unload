@@ -1,0 +1,8 @@
+#!/bin/sh
+
+module="haga_drvr"
+device="haga"
+
+/sbin/rmmod $module $* || exit 1
+
+rm -f /dev/${device}
