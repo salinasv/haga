@@ -13,6 +13,7 @@
 #define LCL_DEBUG_ALL 0
 
 #define LCL_DEBUG_LEVEL LCL_DEBUG_ALL
+#define DRV_HGA "haga: "
 
 #define PCI_DEVICE_ID_TSP_COP 0x5050
 
@@ -29,14 +30,14 @@ struct cdev *cdevice;
 /* File operaitons */
 int haga_open(struct inode *node, struct file *flip)
 {
-	printk(KERN_DEBUG "open()\n");
+	printk(KERN_DEBUG DRV_HGA "open()\n");
 
 	return 0;
 }
 
 int haga_release(struct inode *node, struct file *flip)
 {
-	printk(KERN_DEBUG "release()\n");
+	printk(KERN_DEBUG DRV_HGA"release()\n");
 
 	return 0;
 }
@@ -46,7 +47,7 @@ static int probe(struct pci_dev *dev, const struct pci_device_id *id)
 	pci_enable_device(dev);
 
 #if LCL_DEBUG_LEVEL >= LCL_DEBUG_ALL
-	printk(KERN_ALERT "We have got a device\n");
+	printk(KERN_ALERT DRV_HGA "We have got a device\n");
 #endif
 
 	return 0;
@@ -80,12 +81,12 @@ static int __init haga_init(void)
 	int result;
 
 #if LCL_DEBUG_LEVEL >= LCL_DEBUG_ALL
-	printk(KERN_ALERT "Loading haga-drvr.\n");
+	printk(KERN_ALERT DRV_HGA "Loading haga-drvr.\n");
 #endif /* LCL_DEBUG_LEVEL */
 
 	result = misc_register(&haga_misc_device);
 	if (result) {
-		printk(KERN_ERR "misc_register failed with error code %d.\n", result);
+		printk(KERN_ERR DRV_HGA "misc_register failed with error code %d.\n", result);
 	}
 
 	return pci_register_driver(&pci_driver);
@@ -95,7 +96,7 @@ static void __exit haga_exit(void)
 {
 
 #if LCL_DEBUG_LEVEL >= LCL_DEBUG_ALL
-	printk(KERN_ALERT "Unloading haga-drvr.\n");
+	printk(KERN_ALERT DRV_HGA "Unloading haga-drvr.\n");
 #endif /* LCL_DEBUG_LEVEL */
 	misc_deregister(&haga_misc_device);
 	pci_unregister_driver(&pci_driver);
