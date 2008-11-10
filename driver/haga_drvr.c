@@ -37,7 +37,7 @@ int haga_open(struct inode *node, struct file *flip)
 
 int haga_release(struct inode *node, struct file *flip)
 {
-	printk(KERN_DEBUG DRV_HGA"release()\n");
+	printk(KERN_DEBUG DRV_HGA "release()\n");
 
 	return 0;
 }
