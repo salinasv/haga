@@ -15,6 +15,8 @@ default:
 
 endif
 
+install:
+	cp 10-haga.rules /etc/udev/rules.d/
+
 clean:
-	echo "clean"
 	rm -rf *.o core .depend .*.cmd *.ko *.mod.c .tmp_versions
