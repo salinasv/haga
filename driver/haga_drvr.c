@@ -4,6 +4,7 @@
  */
 
 //#include <linux/cdev.h>
+#include <asm/uaccess.h> 	/* get/put_user() */
 #include <linux/fs.h>
 #include <linux/init.h>
 #include <linux/miscdevice.h>
@@ -44,6 +45,38 @@ int haga_release(struct inode *node, struct file *flip)
 	printk(KERN_DEBUG DRV_HGA "release()\n");
 
 	return 0;
+}
+
+ssize_t read(struct file *file, char __user *buf, size_t count, loff_t *offset)
+{
+	u32 data;
+
+	data = readl(pci_bar0 + *offset);
+
+	printk(KERN_INFO DRV_HGA "you just read %X using %X offset size %d\n", data,
+			(unsigned int)*offset, count);
+
+	put_user(data, (u32*)buf);
+
+	return sizeof(data);
+}
+
+ssize_t write(struct file *file, const char __user *buf,  size_t count, loff_t *offset)
+{
+	u32 data;
+	int tmp;
+
+	tmp = get_user(data, (u32*)buf);
+
+	printk(KERN_INFO DRV_HGA "you want to write %x using %X offset, size %d\n", data,
+			(unsigned int)*offset, count);
+
+	writel(data, (pci_bar0 + *offset));
+
+#if LCL_DEBUG_LEVEL >= LCL_DEBUG_ALL
+	printk(KERN_DEBUG DRV_HGA "write()\n");
+#endif
+	return 1;
 }
 
 static int probe(struct pci_dev *dev, const struct pci_device_id *id)
@@ -119,6 +152,8 @@ static struct file_operations haga_fop = {
 	.owner = 	THIS_MODULE,
 	.open = 	haga_open,
 	.release = 	haga_release,
+	.write = 	write,
+	.read = 	read,
 };
 
 static struct miscdevice haga_misc_device = {
