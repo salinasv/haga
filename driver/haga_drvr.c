@@ -104,6 +104,8 @@ static void remove(struct pci_dev *dev)
 
 	iounmap((void __iomem *)pci_bar1);
 	release_mem_region(bar_addr, size);
+
+	pci_disable_device(dev);
 }
 
 static struct pci_driver pci_driver = {
