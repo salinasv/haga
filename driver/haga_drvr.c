@@ -16,7 +16,10 @@
 #define LCL_DEBUG_LEVEL LCL_DEBUG_ALL
 #define DRV_HGA "haga: "
 
+/*
 #define PCI_DEVICE_ID_TSP_COP 0x5050
+*/
+#define PCI_DEVICE_ID_TSP_COP 0x000A
 
 MODULE_LICENSE("GPL");
 
