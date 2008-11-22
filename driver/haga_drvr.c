@@ -26,6 +26,10 @@ static struct pci_device_id ids[] = {
 MODULE_DEVICE_TABLE(pci, ids);
 
 struct cdev *cdevice;
+
+/* BAR address */
+static u32 __iomem *pci_bar0;
+static u32 __iomem *pci_bar1;
  
 /* File operaitons */
 int haga_open(struct inode *node, struct file *flip)
@@ -44,17 +48,62 @@ int haga_release(struct inode *node, struct file *flip)
 
 static int probe(struct pci_dev *dev, const struct pci_device_id *id)
 {
+	unsigned long bar_addr;
+	unsigned long tmp;
+	unsigned long size;
+
 	pci_enable_device(dev);
 
 #if LCL_DEBUG_LEVEL >= LCL_DEBUG_ALL
 	printk(KERN_ALERT DRV_HGA "We have got a device\n");
 #endif
 
+	bar_addr = pci_resource_start(dev, 0);
+	tmp = pci_resource_end(dev, 0);
+	size = tmp - bar_addr;
+
+	if(!request_mem_region(bar_addr, size, "haga")) {
+		printk(KERN_INFO DRV_HGA "can't get I/O mem address 0x%1.lx\n", bar_addr);
+		return -ENODEV;
+	}
+
+	printk(KERN_INFO DRV_HGA "mem requested, want to map io.\n");
+	pci_bar0 = ioremap(bar_addr, size);
+
+	printk(KERN_INFO DRV_HGA "IO mapped BAR0\n");
+
+	bar_addr = pci_resource_start(dev, 1);
+	tmp = pci_resource_end(dev, 1);
+	size = tmp - bar_addr;
+
+	if(!request_mem_region(bar_addr, size, "haga")) {
+		printk(KERN_INFO DRV_HGA "can't get I/O mem address 0x%1.lx\n", bar_addr);
+		return -ENODEV;
+	}
+	pci_bar1 = ioremap(bar_addr, size);
+
 	return 0;
 }
 
 static void remove(struct pci_dev *dev)
 {
+	unsigned long bar_addr;
+	unsigned long tmp;
+	unsigned long size;
+
+	bar_addr = pci_resource_start(dev, 0);
+	tmp = pci_resource_end(dev, 0);
+	size = tmp - bar_addr;
+
+	iounmap((void __iomem *)pci_bar0);
+	release_mem_region(bar_addr, size);
+
+	bar_addr = pci_resource_start(dev, 1);
+	tmp = pci_resource_end(dev, 1);
+	size = tmp - bar_addr;
+
+	iounmap((void __iomem *)pci_bar1);
+	release_mem_region(bar_addr, size);
 }
 
 static struct pci_driver pci_driver = {
