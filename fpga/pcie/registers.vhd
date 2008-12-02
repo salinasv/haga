@@ -101,7 +101,6 @@ begin
 	begin
 		if (clk = '1' and clk'event) then
 			if (rd_addr_i((BAR_EN_WIDTH+BAR_ADDR_WIDTH)-1 downto BAR_ADDR_WIDTH) = BAR0) then
-			--if (wr_addr(12 downto 11) = "00") then
 				if (rd_addr_i(BAR_ADDR_WIDTH-1 downto 2) = 0) then
 					rd_aligned_data <= reg0;
 				elsif (rd_addr_i(BAR_ADDR_WIDTH-1 downto 2) = 1) then
@@ -119,24 +118,6 @@ begin
 			end if;
 		end if;
 	end process;
-
-
-	W1:process(clk)begin
-		if (clk = '1' and clk'event) then
-			if (clk = '1' and clk'event) then
-				-- We want this to be BAR0
-				if (wr_addr_i(BAR_ADDR_WIDTH+BAR_EN_WIDTH-1 downto BAR_EN_WIDTH) = BAR0) then
-					-- Reg1
-					if (wr_addr_i(BAR_ADDR_WIDTH-1 downto 2) = 1) then
-						if (wr_en_i = '1') then
-							reg1 <= wr_aligned_data;
-						end if;
-					end if;
-				end if;
-			end if;
-		end if;
-	end process;
-
 
 end Behavioral;
 
