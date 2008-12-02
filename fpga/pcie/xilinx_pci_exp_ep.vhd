@@ -534,10 +534,12 @@ app : pci_exp_64b_app port map (
 
 );
 
-led <= regs(2 downto 0) when btn = "111" else
-	   regs(5 downto 3) when btn = "110" else
-	   regs(7 downto 5) when btn = "101" else
-	   regs(2 downto 0);
+led(2) <= trn_lnk_up_n_c;
+led(1 downto 0) <= regs(1 downto 0) when btn = "111" else
+					regs(3 downto 2) when btn = "110" else
+					regs(5 downto 4) when btn = "101" else
+					regs(7 downto 6) when btn = "011" else
+					regs(1 downto 0);
  
 
 end; -- XILINX_PCI_EXP_EP
