@@ -60,6 +60,8 @@ architecture Behavioral of registers is
 	signal reg0 : std_logic_vector(31 downto 0) := x"AAAAAAAA";
 --	signal reg0 : std_logic_vector(31 downto 0) := x"55555555";
 	signal reg1 : std_logic_vector(31 downto 0);
+	signal reg2 : std_logic_vector(31 downto 0);
+	signal reg3 : std_logic_vector(31 downto 0);
 
 	signal rd_aligned_data 	: std_logic_vector(31 downto 0);
 	signal wr_aligned_data 	: std_logic_vector(31 downto 0);
@@ -76,11 +78,19 @@ begin
 	W0:process(clk)begin
 		if (clk = '1' and clk'event) then
 			-- We want this to be BAR0
-			if (wr_addr_i(BAR_ADDR_WIDTH+BAR_EN_WIDTH-1 downto BAR_EN_WIDTH) = BAR0) then
-				-- Reg0
-				if (wr_addr_i(BAR_ADDR_WIDTH-1 downto 2) = 0) then
-					if (wr_en_i = '1') then
-						reg0 <= reg0 + 1;
+			if (wr_addr_i((BAR_EN_WIDTH+BAR_ADDR_WIDTH)-1 downto BAR_ADDR_WIDTH) = BAR0) then
+				if (wr_en_i = '1') then
+					-- Reg0
+					if (wr_addr_i(BAR_ADDR_WIDTH-1 downto 2) = 0) then
+							reg0 <= wr_aligned_data;
+					elsif (wr_addr_i(BAR_ADDR_WIDTH-1 downto 2) = 1) then
+							reg1 <= wr_aligned_data;
+					elsif (wr_addr_i(BAR_ADDR_WIDTH-1 downto 2) = 2) then
+							reg2 <= wr_aligned_data;
+					elsif (wr_addr_i(BAR_ADDR_WIDTH-1 downto 2) = 3) then
+							reg3 <= wr_aligned_data;
+					else
+						reg0 <= not reg0;
 					end if;
 				end if;
 			else
@@ -92,16 +102,21 @@ begin
 	Rd:process(clk)
 	begin
 		if (clk = '1' and clk'event) then
-			if (wr_addr_i(BAR_ADDR_WIDTH+BAR_EN_WIDTH-1 downto BAR_ADDR_WIDTH) = BAR0) then
+			if (rd_addr_i((BAR_EN_WIDTH+BAR_ADDR_WIDTH)-1 downto BAR_ADDR_WIDTH) = BAR0) then
 			--if (wr_addr(12 downto 11) = "00") then
 				if (rd_addr_i(BAR_ADDR_WIDTH-1 downto 2) = 0) then
 					rd_aligned_data <= reg0;
 				elsif (rd_addr_i(BAR_ADDR_WIDTH-1 downto 2) = 1) then
-					rd_aligned_data <= reg0;
+					rd_aligned_data <= reg1;
+				elsif (rd_addr_i(BAR_ADDR_WIDTH-1 downto 2) = 2) then
+					rd_aligned_data <= reg2;
+				elsif (rd_addr_i(BAR_ADDR_WIDTH-1 downto 2) = 3) then
+					rd_aligned_data <= reg3;
 				else
 					rd_aligned_data <= x"12345678";
 				end if;
 			else
+				rd_aligned_data(31 downto BAR_EN_WIDTH+BAR_ADDR_WIDTH) <= (others => '0');
 				rd_aligned_data(BAR_ADDR_WIDTH+BAR_EN_WIDTH-1 downto 0)  <= rd_addr_i;
 			end if;
 		end if;
@@ -123,7 +138,7 @@ begin
 			end if;
 		end if;
 	end process;
-					
+
 
 end Behavioral;
 
