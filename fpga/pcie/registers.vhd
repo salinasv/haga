@@ -89,8 +89,6 @@ begin
 							reg2 <= wr_aligned_data;
 					elsif (wr_addr_i(BAR_ADDR_WIDTH-1 downto 2) = 3) then
 							reg3 <= wr_aligned_data;
-					else
-						reg0 <= not reg0;
 					end if;
 				end if;
 			else
