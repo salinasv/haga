@@ -353,8 +353,8 @@ begin
           if (trn_rsrc_rdy_n = '0') then
 
             trn_rdst_rdy_n_int <= '1';
-            req_addr_o   <= region_select(1 downto 0) &
-                            trn_rd((34+BAR_ADDR_WIDTH)-1 downto 34);
+            req_addr_o   <= region_select(1 downto 0) & "00" &
+                            trn_rd((34+BAR_ADDR_WIDTH-2)-1 downto 34);
             req_compl_o  <= '1';
             req_compl_with_data_o  <= '1';
             state        <= RX_WAIT_STATE;
@@ -373,8 +373,8 @@ begin
             wr_data_o  <= trn_rd(31 downto 0);
             wr_en_o    <= '1';
             trn_rdst_rdy_n_int <= '1';
-            wr_addr_o  <= region_select(1 downto 0) &
-                          trn_rd((34+BAR_ADDR_WIDTH)-1 downto 34);
+            wr_addr_o  <= region_select(1 downto 0) & "00" &
+                          trn_rd((34+BAR_ADDR_WIDTH-2)-1 downto 34);
             state        <= RX_WAIT_STATE;
 
           else
@@ -391,8 +391,8 @@ begin
             wr_data_o  <= trn_rd(31 downto 0);
             wr_en_o    <= '1';
             trn_rdst_rdy_n_int <= '1';
-            wr_addr_o  <= region_select(1 downto 0) &
-						  trn_rd(34+BAR_ADDR_WIDTH-1 downto 34);
+            wr_addr_o  <= region_select(1 downto 0) & "00" &
+						  trn_rd(34+(BAR_ADDR_WIDTH-2)-1 downto 34);
 
             trn_rdst_rdy_n_int <= '1';           
             req_compl_o  <= '1';
@@ -411,7 +411,7 @@ begin
 
           if (trn_rsrc_rdy_n = '0') then
 
-            req_addr_o   <= region_select(1 downto 0)  & trn_rd(10 downto 2) & "00";
+            req_addr_o   <= region_select(1 downto 0)  & "00" & trn_rd(10 downto 2);
             req_compl_o  <= '1';
             req_compl_with_data_o  <= '1';
             trn_rdst_rdy_n_int <= '1';
