@@ -39,6 +39,7 @@ Port (
 	clk			: in std_logic;
 	reset		: in std_logic;
 
+	enable 		: in std_logic;
 	dest_load	: in std_logic;
 
 	-- Data
@@ -68,9 +69,11 @@ begin
 			if (reset = '1') then
 				dest_reg <= (others => '0');
 
-			-- We are serially loading the destination to each module
-			elsif (dest_load = '1') then
-				dest_reg <= dest_in;
+			elsif (enable = '1') then
+				-- We are serially loading the destination to each module
+				if (dest_load = '1') then
+					dest_reg <= dest_in;
+				end if;
 			end if;
 		end if;
 	end process;
@@ -84,11 +87,13 @@ begin
 			-- reset
 			if (reset = '1') then
 				acc <= (others => '0');
+			elsif (enable = '1') then
 
-			-- Only load the acc when the data in the bus is the one we are looking for
-			-- and we want to enable this ONLY when we are not loading the destination
-			elsif (iter = dest_reg and dest_load = '0') then
-				acc <= sum_sig;
+				-- Only load the acc when the data in the bus is the one we are looking for
+				-- and we want to enable this ONLY when we are not loading the destination
+				if (iter = dest_reg and dest_load = '0') then
+					acc <= sum_sig;
+				end if;
 			end if;
 		end if;
 	end process;

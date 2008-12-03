@@ -37,6 +37,7 @@ port (
 	clk			: in std_logic;
 	reset		: in std_logic;
 
+	enable 		: in std_logic;
 	dest_load	: in std_logic;
 
 	-- data
@@ -60,6 +61,7 @@ architecture Behavioral of eval_pool is
 		clk			: in std_logic;
 		reset		: in std_logic;
 
+		enable 		: in std_logic;
 		dest_load	: in std_logic;
 
 		Iter		: in std_logic_vector(P_UNITS-1 downto 0);
@@ -89,6 +91,7 @@ begin
 	PORT MAP(
 		clk 		=> clk,
 		reset		=> reset,
+		enable 		=> enable,
 		dest_load 	=> dest_load,
 		Iter 		=> Iter,
 		Current 	=> Current,
@@ -107,6 +110,7 @@ begin
 		PORT MAP(
 			clk 		=> clk,
 			reset		=> reset,
+			enable 		=> enable,
 			dest_load 	=> dest_load,
 			Iter 		=> Iter,
 			Current 	=> Current,
@@ -124,6 +128,7 @@ begin
 	PORT MAP(
 		clk 		=> clk,
 		reset		=> reset,
+		enable 		=> enable,
 		dest_load 	=> dest_load,
 		Iter 		=> Iter,
 		Current 	=> Current,
