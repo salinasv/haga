@@ -203,7 +203,9 @@ begin
 	COL:process (clk)
 	begin
 		if (clk = '1' and clk'event) then
-			if (pstate = SF_EV_NCOL) then
+			if (pstate = S0_RESET or pstate = S4_LDEV_RESET) then
+				columns <= (others => '0');
+			elsif (pstate = SF_EV_NCOL or pstate = SG_PERM_NCOL) then
 				columns <= columns + 1;
 			end if;
 		end if;
