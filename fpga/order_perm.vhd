@@ -36,6 +36,7 @@ entity order_perm is
 	clk		: in std_logic;
 	Dat_in	: in std_logic_vector(M_LOG2-1 downto 0);
 	reset	: in std_logic;
+	enable 	: in std_logic;
 
 	-- Agregar este registro para meterle un delay y el dato esté a la par
 	-- de la dirección donde queremos asignarlo.
@@ -64,7 +65,7 @@ begin
 		if (clk = '1' and clk'event) then
 			if (reset = '1' or running = '0') then
 				perm_cont <= (others => '0');
-			else
+			elsif (enable = '1') then
 				perm_cont <= perm_cont + 1;
 			end if;
 		end if;
@@ -108,7 +109,7 @@ begin
 	WrEn:process (clk)
 	begin
 		if (clk = '1' and clk'event) then
-			if (reset = '1' or running = '0') then
+			if (reset = '1' or running = '0' or enable = '0') then
 				WE <= '0';
 			else
 				WE <= '1';
@@ -123,10 +124,13 @@ begin
 		if (clk = '1' and clk'event) then
 			if (reset = '1') then 
 				dest <= (others => '0');
-			elsif (perm_cont = NOT_ZERO) then
-				dest <= first;
-			else
-				dest <= dat_in;
+				if (enable = '1') then
+					if (perm_cont = NOT_ZERO) then
+						dest <= first;
+					else
+						dest <= dat_in;
+					end if;
+				end if;
 			end if;
 		end if;
 	end process;
@@ -136,10 +140,13 @@ begin
 		if (clk = '1' and clk'event) then
 			if (reset = '1') then
 				source <= (others => '0');
-			elsif (running = '0') then
-				source <= dat_in;
-			else
-				source <= dest;
+				if (enable = '1') then
+					if (running = '0') then
+						source <= dat_in;
+					else
+						source <= dest;
+					end if;
+				end if;
 			end if;
 		end if;
 	end process;
