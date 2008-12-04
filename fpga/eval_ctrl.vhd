@@ -70,6 +70,7 @@ generic (
 	-- Mem interface
 	mm_re 		: out std_logic;
 	--mm_addr 	: out std_logic;
+	mm_column 	: out std_logic_vector(P_UNITS-1 downto 0);
 	mm_ctrl_ord : out std_logic
 );
 	
@@ -186,6 +187,8 @@ begin
 	
 	mm_ctrl_ord <= '1' when (pstate = S5_LDEV_LOAD) else
 				   '0';
+
+	mm_column <= columns;
 	
 	CNT:process (clk)
 	begin
