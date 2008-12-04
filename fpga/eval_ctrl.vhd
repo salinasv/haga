@@ -196,6 +196,15 @@ begin
 		end if;
 	end process;
 
+	COL:process (clk)
+	begin
+		if (clk = '1' and clk'event) then
+			if (pstate = SF_EV_NCOL) then
+				columns <= columns + 1;
+			end if;
+		end if;
+	end process;
+
 
 end Behavioral;
 
