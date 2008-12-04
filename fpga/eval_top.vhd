@@ -31,8 +31,7 @@ entity eval_top is
 generic (
 	DATA_WIDTH 		: integer := 32;
 	P_UNITS 		: integer := 8;
-	FIFO_WIDTH 		: integer := 32;
-	ADDR_WIDTH 		: integer := 11
+	FIFO_WIDTH 		: integer := 32
 );
 port (
 	clk 	: in std_logic;
@@ -61,6 +60,8 @@ port (
 end eval_top;
 
 architecture Behavioral of eval_top is
+
+	constant ADDR_WIDTH 		: integer := 2*P_UNITS;
 
 	component eval_ctrl
 	generic (
@@ -102,6 +103,7 @@ architecture Behavioral of eval_top is
 
 		-- Mem interface
 		mm_re 		: out std_logic;
+		mm_column 	: out std_logic_vector(P_UNITS-1 downto 0);
 		mm_ctrl_ord : out std_logic
 	);
 	end component;
@@ -179,6 +181,7 @@ architecture Behavioral of eval_top is
 
 	signal mm_re 		: std_logic;
 	--signal mm_we 		: std_logic;
+	signal mm_column 	: std_logic_vector(P_UNITS-1 downto 0);
 	signal mm_ctrl_ord 	: std_logic;
 
 	signal br_data_in 	: std_logic_vector(DATA_WIDTH-1 downto 0);
@@ -228,6 +231,7 @@ begin
 
 		-- Mem interface
 		mm_re 		=> mm_re,
+		mm_column 	=> mm_column,
 		mm_ctrl_ord => mm_ctrl_ord
 	);
 
@@ -286,8 +290,8 @@ begin
 		addr 		=> br_addr
 	);
 
-	br_addr(P_UNITS-1 downto 0) <= ev_iter when (mm_ctrl_ord = '1') else
-			   ord_ram_addr;
+	br_addr <= mm_column & ev_iter when (mm_ctrl_ord = '1') else
+			  mm_column & ord_ram_addr;
 
 	br_data_in(P_UNITS-1 downto 0) <= ord_ram_dat;
 	br_wr_en <= mm_re when (mm_ctrl_ord = '1') else

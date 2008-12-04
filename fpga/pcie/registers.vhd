@@ -58,8 +58,7 @@ architecture Behavioral of registers is
 	generic (
 		DATA_WIDTH 		: integer;
 		P_UNITS 		: integer;
-		FIFO_WIDTH 		: integer;
-		ADDR_WIDTH 		: integer
+		FIFO_WIDTH 		: integer
 	);
 	port (
 		clk 	: in std_logic;
@@ -292,8 +291,7 @@ begin
 	generic map(
 		DATA_WIDTH 		=> DATA_WIDTH,
 		P_UNITS 		=> P_UNITS,
-		FIFO_WIDTH 		=> FIFO_WIDTH,
-		ADDR_WIDTH 		=> ADDR_WIDTH
+		FIFO_WIDTH 		=> FIFO_WIDTH
 	)
 	port map(
 		clk 	=> clk,
