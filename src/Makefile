@@ -20,5 +20,10 @@ select.o: select.c
 tsp.o: tsp.c
 	$(CC) -c $(CFLAGS) tsp.c
 
+libhaga.o: libhaga
+
+libhaga: libhaga.c
+	$(CC) -c $(CFLAGS) libhaga.c
+
 clean:
 	rm *.o
