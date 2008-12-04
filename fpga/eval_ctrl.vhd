@@ -80,13 +80,14 @@ architecture Behavioral of eval_ctrl is
 	type state_type is (S0_RESET, S1_PERM_ASK, S2_PERM_WAIT, S3_PERM_ORD,
 		S4_LDEV_RESET, S5_LDEV_LOAD, S6_EV_RESET, S7_EV_ASK, S8_EV_WAIT,
 		S9_EV_DO, SA_REP_RESET, SB_REP_FILL, SC_REP_ASK, SD_REP_WAIT,
-		SE_DONE);
+		SE_DONE, SF_EV_NCOL);
 
 	signal pstate 	: state_type;
 	signal nstate 	: state_type;
 
-	signal cont : std_logic_vector(P_UNITS-1 downto 0);
-	constant LAST : std_logic_vector(P_UNITS-1 downto 0) := (others => '1');
+	signal cont 	: std_logic_vector(P_UNITS-1 downto 0);
+	signal columns 	: std_logic_vector(P_UNITS-1 downto 0);
+	constant LAST 	: std_logic_vector(P_UNITS-1 downto 0) := (others => '1');
 
 begin
 
@@ -121,13 +122,15 @@ begin
 			  S9_EV_DO		when ((pstate = S8_EV_WAIT and sw_ffin_full = '1')
 					or (pstate = S9_EV_DO and sw_ffin_empty = '0')) else
 			  SA_REP_RESET	when (pstate = S9_EV_DO and sw_ffin_empty = '1'
-			  and cont /= LAST) else
+			  and cont = LAST and columns = LAST) else
 			  SB_REP_FILL	when ((pstate = SA_REP_RESET)
 				  or (pstate = SB_REP_FILL and sw_ffout_full = '0' and cont /= LAST)) else
 			  SC_REP_ASK	when (pstate = SB_REP_FILL and sw_ffout_full = '1') else
 			  SD_REP_WAIT	when ((pstate = SC_REP_ASK)
 					or (pstate = SD_REP_WAIT and sw_ffout_empty = '0')) else
 			  SE_DONE		when (pstate = SD_REP_WAIT and sw_ffout_empty = '1') else
+			  SF_EV_NCOL 	when (pstate = S9_EV_DO and columns /= LAST
+				  and cont = LAST) else
 			  S0_RESET;
 
 	-- Outputs
