@@ -72,7 +72,7 @@ architecture Behavioral of registers is
 		sw_set_res 			: out std_logic;
 		sw_get_perm_batch 	: out std_logic;
 		sw_get_table_batch 	: out std_logic;
-		sw_addr_cmd 		: out std_logic_vector(P_UNITS-1 downto 0);
+		sw_addr_cmd 		: out std_logic_vector(2*P_UNITS-1 downto 0);
 		sw_addr_cmd_we 		: out std_logic;
 
 		sw_ffin_full 	: in std_logic;
@@ -148,7 +148,7 @@ architecture Behavioral of registers is
 	--signal sw_set_res 			: std_logic;
 	--signal sw_get_perm_batch 	: std_logic;
 	--signal sw_get_table_batch 	: std_logic;
-	signal sw_addr_cmd 			: std_logic_vector(P_UNITS-1 downto 0);
+	signal sw_addr_cmd 			: std_logic_vector(2*P_UNITS-1 downto 0);
 	signal sw_addr_cmd_we 		: std_logic;
 
 	-- fifo signals
@@ -212,7 +212,7 @@ begin
 	begin
 		if (clk = '1' and clk'event) then
 			if (sw_addr_cmd_we = '1') then
-				reg3(P_UNITS-1 downto 0) <= sw_addr_cmd;
+				reg3(2*P_UNITS-1 downto 0) <= sw_addr_cmd;
 			end if;
 		end if;
 	end process;

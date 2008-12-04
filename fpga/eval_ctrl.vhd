@@ -43,7 +43,7 @@ generic (
 	sw_set_res 			: out std_logic;
 	sw_get_perm_batch 	: out std_logic;
 	sw_get_table_batch 	: out std_logic;
-	sw_addr_cmd 		: out std_logic_vector(P_UNITS-1 downto 0);
+	sw_addr_cmd 		: out std_logic_vector(2*P_UNITS-1 downto 0);
 	sw_addr_cmd_we 		: out std_logic;
 
 	--sw_ffin_data 	: in std_logic_vector(DATA_WIDTH-1 downto 0);
@@ -153,7 +153,7 @@ begin
 	sw_addr_cmd_we <= '1' when (pstate = S1_PERM_ASK or pstate = S7_EV_ASK) else
 					  '0';
 	
-	sw_addr_cmd <= cont;
+	sw_addr_cmd <= columns & cont;
 
 	sw_ffin_re <= '1' when (pstate = S3_PERM_ORD or pstate = S9_EV_DO) else
 				  '0';

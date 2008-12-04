@@ -45,7 +45,7 @@ port (
 	sw_set_res 			: out std_logic;
 	sw_get_perm_batch 	: out std_logic;
 	sw_get_table_batch 	: out std_logic;
-	sw_addr_cmd 		: out std_logic_vector(P_UNITS-1 downto 0);
+	sw_addr_cmd 		: out std_logic_vector(2*P_UNITS-1 downto 0);
 	sw_addr_cmd_we 		: out std_logic;
 
 	sw_ffin_full 	: in std_logic;
@@ -78,7 +78,7 @@ architecture Behavioral of eval_top is
 		sw_set_res 			: out std_logic;
 		sw_get_perm_batch 	: out std_logic;
 		sw_get_table_batch 	: out std_logic;
-		sw_addr_cmd 		: out std_logic_vector(P_UNITS-1 downto 0);
+		sw_addr_cmd 		: out std_logic_vector(2*P_UNITS-1 downto 0);
 		sw_addr_cmd_we 		: out std_logic;
 
 		sw_ffin_full 	: in std_logic;
