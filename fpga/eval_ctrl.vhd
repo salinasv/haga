@@ -111,7 +111,8 @@ begin
 					or (pstate = S2_PERM_WAIT and sw_ffin_full = '0')) else
 			  S3_PERM_ORD	when ((pstate = S2_PERM_WAIT)
 					or (pstate = S3_PERM_ORD and sw_ffin_empty = '0')) else
-			  S4_LDEV_RESET	when (pstate = S3_PERM_ORD and sw_ffin_empty = '1') else
+			  S4_LDEV_RESET	when ((pstate = S3_PERM_ORD and sw_ffin_empty = '1')
+					or (pstate = SF_EV_NCOL)) else
 			  S5_LDEV_LOAD	when ((pstate = S4_LDEV_RESET)
 					or (pstate = S5_LDEV_LOAD and cont /= LAST)) else
 			  S6_EV_RESET	when (pstate = S5_LDEV_LOAD and cont = LAST) else
