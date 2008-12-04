@@ -80,7 +80,7 @@ architecture Behavioral of eval_ctrl is
 	type state_type is (S0_RESET, S1_PERM_ASK, S2_PERM_WAIT, S3_PERM_ORD,
 		S4_LDEV_RESET, S5_LDEV_LOAD, S6_EV_RESET, S7_EV_ASK, S8_EV_WAIT,
 		S9_EV_DO, SA_REP_RESET, SB_REP_FILL, SC_REP_ASK, SD_REP_WAIT,
-		SE_DONE, SF_EV_NCOL);
+		SE_DONE, SF_EV_NCOL, SG_PERM_NCOL);
 
 	signal pstate 	: state_type;
 	signal nstate 	: state_type;
@@ -106,7 +106,8 @@ begin
 	nstate <= S0_RESET 		when ((pstate = S0_RESET and sw_start = '0') 
 					or (pstate = SE_DONE)) else
 			  S1_PERM_ASK	when ((pstate = S0_RESET and sw_start = '1')
-					or (pstate = S3_PERM_ORD and ord_done = '0')) else
+					or (pstate = S3_PERM_ORD and ord_done = '0'
+						and cont = LAST and columns /= LAST)) else
 			  S2_PERM_WAIT	when ((pstate = S1_PERM_ASK)
 					or (pstate = S2_PERM_WAIT and sw_ffin_full = '0')) else
 			  S3_PERM_ORD	when ((pstate = S2_PERM_WAIT)
@@ -132,6 +133,8 @@ begin
 			  SE_DONE		when (pstate = SD_REP_WAIT and sw_ffout_empty = '1') else
 			  SF_EV_NCOL 	when (pstate = S9_EV_DO and columns /= LAST
 				  and cont = LAST) else
+			  SG_PERM_NCOL 	when (pstate = S3_PERM_ORD and columns /= LAST
+					and cont = LAST) else
 			  S0_RESET;
 
 	-- Outputs
